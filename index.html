@@ -1,0 +1,577 @@
+<!-- modified from url=(0044)https://peterwang512.github.io/CNNDetection/ -->
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+  <!--
+  <script src="./resources/jsapi" type="text/javascript"></script>
+  <script type="text/javascript" async>google.load("jquery", "1.3.2");</script>
+ -->
+  <style type="text/css">
+    body {
+      font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 1100px;
+    }
+
+    h1 {
+      font-weight: 300;
+    }
+
+    h2 {
+      font-weight: 300;
+    }
+
+    .disclaimerbox {
+      background-color: #eee;
+      border: 1px solid #eeeeee;
+      border-radius: 10px;
+      -moz-border-radius: 10px;
+      -webkit-border-radius: 10px;
+      padding: 20px;
+    }
+
+    video.header-vid {
+      height: 140px;
+      border: 1px solid black;
+      border-radius: 10px;
+      -moz-border-radius: 10px;
+      -webkit-border-radius: 10px;
+    }
+
+    img.header-img {
+      height: 140px;
+      border: 1px solid black;
+      border-radius: 10px;
+      -moz-border-radius: 10px;
+      -webkit-border-radius: 10px;
+    }
+
+    img.rounded {
+      border: 0px solid #eeeeee;
+      border-radius: 10px;
+      -moz-border-radius: 10px;
+      -webkit-border-radius: 10px;
+    }
+
+    a:link,
+    a:visited {
+      color: #1367a7;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #208799;
+    }
+
+    td.dl-link {
+      height: 160px;
+      text-align: center;
+      font-size: 22px;
+    }
+
+    .layered-paper-big {
+      /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+      box-shadow:
+        0px 0px 1px 1px rgba(0, 0, 0, 0.35),
+        /* The top layer shadow */
+        5px 5px 0 0px #fff,
+        /* The second layer */
+        5px 5px 1px 1px rgba(0, 0, 0, 0.35),
+        /* The second layer shadow */
+        10px 10px 0 0px #fff,
+        /* The third layer */
+        10px 10px 1px 1px rgba(0, 0, 0, 0.35),
+        /* The third layer shadow */
+        15px 15px 0 0px #fff,
+        /* The fourth layer */
+        15px 15px 1px 1px rgba(0, 0, 0, 0.35),
+        /* The fourth layer shadow */
+        20px 20px 0 0px #fff,
+        /* The fifth layer */
+        20px 20px 1px 1px rgba(0, 0, 0, 0.35),
+        /* The fifth layer shadow */
+        25px 25px 0 0px #fff,
+        /* The fifth layer */
+        25px 25px 1px 1px rgba(0, 0, 0, 0.35);
+      /* The fifth layer shadow */
+      margin-left: 10px;
+      margin-right: 45px;
+    }
+
+    .layered-paper {
+      /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+      box-shadow:
+        0px 0px 1px 1px rgba(0, 0, 0, 0.35),
+        /* The top layer shadow */
+        5px 5px 0 0px #fff,
+        /* The second layer */
+        5px 5px 1px 1px rgba(0, 0, 0, 0.35),
+        /* The second layer shadow */
+        10px 10px 0 0px #fff,
+        /* The third layer */
+        10px 10px 1px 1px rgba(0, 0, 0, 0.35);
+      /* The third layer shadow */
+      margin-top: 5px;
+      margin-left: 10px;
+      margin-right: 30px;
+      margin-bottom: 5px;
+    }
+
+    .vert-cent {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    }
+  </style>
+
+
+
+  <title> FaceShifter: Towards High Fidelity And Occlusion Aware Face Swapping</title>
+  <meta property="og:image" content="https://peterwang512.github.io/CNNDetection/images/teaser.png">
+  <meta property="og:title" content="FaceShifter: Towards High Fidelity And Occlusion Aware Face Swapping">
+  <!-- <meta property='og:video' content='https://www.youtube.com/watch?v=TUootD36Xm0'/> -->
+</head>
+
+<body>
+  <br>
+  <center>
+    <span style="font-size:34px">FaceShifter: Towards High Fidelity And Occlusion Aware Face Swapping</span><br><br>
+
+    <table align="center" width="850px">
+      <tbody>
+        <tr>
+          <td align="center" width="205px">
+            <center>
+              <span style="font-size:20px"><a href="https://https://lingzhili.com/"> Lingzhi Li </a><sup>1</sup></span>
+            </center>
+          </td>
+          <td align="center" width="175px">
+            <center>
+              <span style="font-size:20px"><a href="https://jianminbao.github.io/">Jianmin Bao</a><sup>2</sup></span>
+            </center>
+          </td>
+          <td align="center" width="175px">
+            <center>
+              <span style="font-size:20px"><a href="https://yang-h.github.io/">Hao Yang</a><sup>2</sup></span>
+            </center>
+          </td>
+          <td align="center" width="175px">
+            <center>
+              <span style="font-size:20px"><a href="https://www.dongchen.pro/">Dong Che </a><sup>1</sup></span>
+            </center>
+          </td>
+          <td align="center" width="175px">
+            <center>
+              <span style="font-size:20px"><a href="https://www.microsoft.com/en-us/research/people/fangwen/">Fang
+                  Wen</a><sup>1</sup></span>
+            </center>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table align="center" width="700px">
+      <tbody>
+        <tr>
+          <td align="center" width="100px">
+            <center>
+              <span style="font-size:20px"></span>
+            </center>
+          </td>
+          <td align="center" width="250px">
+            <center>
+              <span style="font-size:20px"><sup>1</sup>Peking University</span>
+            </center>
+          </td>
+          <td align="center" width="250px">
+            <center>
+              <span style="font-size:20px"><sup>2</sup>Microsoft Research</span>
+            </center>
+          </td>
+          <td align="center" width="100px">
+            <center>
+              <span style="font-size:20px"></span>
+            </center>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table align="center" width="700px">
+      <tbody>
+        <tr>
+
+          <td align="center" width="200px">
+            <center>
+              <br>
+              <span style="font-size:20px">Dataset <a href="./index.html"> [GitHub]</a></span>
+            </center>
+          </td>
+          <td align="center" width="200px">
+            <center>
+              <br>
+              <span style="font-size:20px">CVPR 2020 (Oral) <a href="https://arxiv.org/pdf/1912.13457.pdf">
+                  [Paper]</a></span>
+            </center>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </center>
+  <br>
+  <table align="center" width="1000px">
+    <tbody>
+      <tr>
+        <td width="400px">
+          <center>
+            <img class="rounded" src="./teaser.pdf" width="1000px">
+          </center>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  Our face swapping results on wild face images under various challenging conditions. All results are generated using a
+  single well-trained two-stage model.
+  <br>
+  <br>
+  <hr>
+
+  <center>
+    <h2>Abstract</h2>
+  </center>
+  In this work, we study various existing benchmarks for deepfake detection researches.
+  In particular, we examine a novel two-stage face swapping algorithm, called FaceShifter, for high fidelity and
+  occlusion aware face swapping. Unlike many existing face swapping works that leverage only limited information from
+  the target image when synthesizing the swapped face, FaceShifter generates the swapped face with high-fidelity by
+  exploiting and integrating the target attributes thoroughly and adaptively. FaceShifter can handle facial occlusions
+  with a second synthesis stage consisting of a Heuristic Error Acknowledging Refinement Network (HEAR-Net), which is
+  trained to recover anomaly regions in a self-supervised way without any manual annotations.
+  Experiments show that existing deepfake detection algorithm performs poorly with FaceShifter, since it achieves
+  advantageous quality over all existing benchmarks. However, our newly developed Face X-Ray~\cite{li2019face} method
+  can reliably detect forged images created by FaceShifter. <br>
+
+
+  <br>
+  <hr>
+   <!--
+  <div class="disclaimerbox">
+    center><h2>How to interpret the results</h2></center> 
+
+    <span style="color:#646464">
+      <center><span style="font-size:28px"><b>Discussion</b></span></center>
+
+      <br>
+
+      Despite the alarm that has been raised by the rapidly improving quality of image synthesis methods, our results
+      suggest that today's CNN-generated images retain <i>detectable fingerprints</i> that distinguish them from real
+      photos. This allows forensic classifiers to generalize from one model to another without extensive adaptation.
+      <br><br>
+
+      However, this does not mean that the current situation will persist. Due to the difficulties in achieving Nash
+      equilibria, none of the current GAN-based architectures are optimized to convergence, <i>i.e.</i> the generator
+      never wins against the discriminator. Were this to change, we would suddenly find ourselves in a situation when
+      synthetic images are completely indistinguishable from real ones. <br><br>
+
+      Even with the current techniques, there remain practical reasons for concern. First, even the best forensics
+      detector will have some trade-off between true detection and false-positive rates. Since a malicious user is
+      typically looking to create a single fake image (rather than a distribution of fakes), they could simply hand-pick
+      the fake image which happens to pass the detection threshold. Second, malicious use of fake imagery is likely be
+      deployed on a social media platform (Facebook, Twitter, YouTube, etc.), so the data will undergo a number of often
+      aggressive transformations (compression, resizing, re-sampling, etc.). While we demonstrated robustness to some
+      degree of JPEG compression, blurring, and resizing, much more work is needed to evaluate how well the current
+      detectors can cope with these transformations <i>in-the-wild</i>. Finally, most documented instances of effective
+      deployment of visual fakes to date have been using classic "shallow" methods, such as Photoshop. We have
+      experimented with running our detector on the face-aware liquify dataset from <a
+        href="https://peterwang512.github.io/FALdetector/">[Wang et al. ICCV 2019]</a>, and found that our method
+      performs at chance on this data. This suggests that shallow methods exhibit fundamentally different behavior than
+      deep methods, and should not be neglected. <br><br>
+
+      We note that detecting fake images is just one small piece of the puzzle of how to combat the threat of visual
+      disinformation. Effective solutions will need to incorporate a wide range of strategies, from technical to social
+      to legal. <br><br>
+    </span>
+
+  </div> 
+  
+  <br>
+  <hr>
+   -->
+   
+  <center>
+    <h2>Video</h2>
+  </center>
+
+  <table align="center" width="750px">
+    <tbody>
+      <tr>
+        <td>
+        <left>
+          <video muted width="480" height="360" controls>
+            <source src="https://lingzhili.com/videos/FaceShifterDemo1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </left>
+      </td>
+      <td>
+        <right>
+          <video muted width="480" height="360" controls>
+
+            <source src="https://lingzhili.com/videos/FaceShifterDemo2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </right>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br>
+  <!--
+        <center>
+        <span style="font-size:22px"><a href="">[DataSet]</a></span>
+      -->
+  <hr>
+
+  <center>
+    <h2>Paper</h2>
+  </center><br>
+  <table align="center" width="700" px="">
+
+    <tbody>
+      <tr>
+        <td><a href="https://arxiv.org/pdf/1912.13457.pdf"><img class="layered-paper-big" style="height:175px"
+              src="./firstpage.jpg"></a></td>
+        <td><span style="font-size:12pt">Lingzhi Li, Jianmin Bao, Hao Yang, Dong Chen, Fang Wen.</span><br>
+          <b><span style="font-size:12pt">FaceShifter: Towards High Fidelity And Occlusion Aware Face
+              Swapping</span></b><br>
+          <span style="font-size:12pt">In CVPR, 2020 (oral presentation). (<a
+              href="https://arxiv.org/pdf/1912.13457.pdf">Paper</a>)</span>
+        </td>
+
+
+      </tr>
+    </tbody>
+  </table>
+  <table align="center" width="600px">
+    <tbody>
+      <tr>
+        <td>
+          <center>
+            <span style="font-size:22px">
+              <a href="https://jianminbao.github.io/FaceShifter/bibtex.txt" target="_blank">[Bibtex]</a>
+            </span>
+          </center>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+
+  <br>
+  <hr>
+
+
+  <table align="center" width="1100px">
+    <tbody>
+      <tr>
+        <td width="400px">
+          <left>
+            <center>
+              <h2>Acknowledgements</h2>
+            </center>
+            We'd like to thank Sicheng Xu, Yu Deng, Jiaolong Yang for helpful advice and discussion. We are
+            grateful to Jinpeng Lin for helping with user study's webpage. Source code of this  webpage was borrow from  <a
+            href="https://peterwang512.github.io/">Peter Wang</a>  . The views, opinions
+            and/or findings expressed are those of the authors and should not be interpreted as representing the
+            official views or policies of Peking University or Microsoft Coporation. 
+          </left>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br><br>
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script type="text/javascript" async=""
+    src="./CNN-generated images are surprisingly easy to spot... for now_files/analytics.js"></script>
+  <script async="" src="./CNN-generated images are surprisingly easy to spot... for now_files/js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-75863369-7');
+  </script>
+
+
+
+  </center><audio controls="controls" style="display: none;"></audio>
+</body>
+<style type="text/css">
+  #yddContainer {
+    display: block;
+    font-family: Microsoft YaHei;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: -4px;
+    left: -4px;
+    font-size: 12px;
+    border: 1px solid
+  }
+
+  #yddTop {
+    display: block;
+    height: 22px
+  }
+
+  #yddTopBorderlr {
+    display: block;
+    position: static;
+    height: 17px;
+    padding: 2px 28px;
+    line-height: 17px;
+    font-size: 12px;
+    color: #5079bb;
+    font-weight: bold;
+    border-style: none solid;
+    border-width: 1px
+  }
+
+  #yddTopBorderlr .ydd-sp {
+    position: absolute;
+    top: 2px;
+    height: 0;
+    overflow: hidden
+  }
+
+  .ydd-icon {
+    left: 5px;
+    width: 17px;
+    padding: 0px 0px 0px 0px;
+    padding-top: 17px;
+    background-position: -16px -44px
+  }
+
+  .ydd-close {
+    right: 5px;
+    width: 16px;
+    padding-top: 16px;
+    background-position: left -44px
+  }
+
+  #yddKeyTitle {
+    float: left;
+    text-decoration: none
+  }
+
+  #yddMiddle {
+    display: block;
+    margin-bottom: 10px
+  }
+
+  .ydd-tabs {
+    display: block;
+    margin: 5px 0;
+    padding: 0 5px;
+    height: 18px;
+    border-bottom: 1px solid
+  }
+
+  .ydd-tab {
+    display: block;
+    float: left;
+    height: 18px;
+    margin: 0 5px -1px 0;
+    padding: 0 4px;
+    line-height: 18px;
+    border: 1px solid;
+    border-bottom: none
+  }
+
+  .ydd-trans-container {
+    display: block;
+    line-height: 160%
+  }
+
+  .ydd-trans-container a {
+    text-decoration: none;
+  }
+
+  #yddBottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    background-position: left -22px
+  }
+
+  .ydd-padding010 {
+    padding: 0 10px
+  }
+
+  #yddWrapper {
+    color: #252525;
+    z-index: 10001;
+    background: url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ab20.png);
+  }
+
+  #yddContainer {
+    background: #fff;
+    border-color: #4b7598
+  }
+
+  #yddTopBorderlr {
+    border-color: #f0f8fc
+  }
+
+  #yddWrapper .ydd-sp {
+    background-image: url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ydd-sprite.png)
+  }
+
+  #yddWrapper a,
+  #yddWrapper a:hover,
+  #yddWrapper a:visited {
+    color: #50799b
+  }
+
+  #yddWrapper .ydd-tabs {
+    color: #959595
+  }
+
+  .ydd-tabs,
+  .ydd-tab {
+    background: #fff;
+    border-color: #d5e7f3
+  }
+
+  #yddBottom {
+    color: #363636
+  }
+
+  #yddWrapper {
+    min-width: 250px;
+    max-width: 400px;
+  }
+</style>
+
+</html>
