@@ -267,49 +267,25 @@
 
   <br>
   <hr>
-   <!--
-  <div class="disclaimerbox">
-    center><h2>About Dataset and SourceCode</h2></center> 
+    <div class="disclaimerbox">
+     
 
     <span style="color:#646464">
-      <center><span style="font-size:28px"><b>Discussion</b></span></center>
+      <center><span style="font-size:28px"><b>Dataset</b></span></center>
 
       <br>
 
-      Despite the alarm that has been raised by the rapidly improving quality of image synthesis methods, our results
-      suggest that today's CNN-generated images retain <i>detectable fingerprints</i> that distinguish them from real
-      photos. This allows forensic classifiers to generalize from one model to another without extensive adaptation.
-      <br><br>
-
-      However, this does not mean that the current situation will persist. Due to the difficulties in achieving Nash
-      equilibria, none of the current GAN-based architectures are optimized to convergence, <i>i.e.</i> the generator
-      never wins against the discriminator. Were this to change, we would suddenly find ourselves in a situation when
-      synthetic images are completely indistinguishable from real ones. <br><br>
-
-      Even with the current techniques, there remain practical reasons for concern. First, even the best forensics
-      detector will have some trade-off between true detection and false-positive rates. Since a malicious user is
-      typically looking to create a single fake image (rather than a distribution of fakes), they could simply hand-pick
-      the fake image which happens to pass the detection threshold. Second, malicious use of fake imagery is likely be
-      deployed on a social media platform (Facebook, Twitter, YouTube, etc.), so the data will undergo a number of often
-      aggressive transformations (compression, resizing, re-sampling, etc.). While we demonstrated robustness to some
-      degree of JPEG compression, blurring, and resizing, much more work is needed to evaluate how well the current
-      detectors can cope with these transformations <i>in-the-wild</i>. Finally, most documented instances of effective
-      deployment of visual fakes to date have been using classic "shallow" methods, such as Photoshop. We have
-      experimented with running our detector on the face-aware liquify dataset from <a
-        href="https://peterwang512.github.io/FALdetector/">[Wang et al. ICCV 2019]</a>, and found that our method
-      performs at chance on this data. This suggests that shallow methods exhibit fundamentally different behavior than
-      deep methods, and should not be neglected. <br><br>
-
-      We note that detecting fake images is just one small piece of the puzzle of how to combat the threat of visual
-      disinformation. Effective solutions will need to incorporate a wide range of strategies, from technical to social
-      to legal. <br><br>
+     We are very excited to announce that we are now collaborating with FaceForensic++ team to advance the face forgery detection 
+	 for GAN-based face swapping methods. We generated the videos between different identities with our proposed FaceShifter and get a newly dataset called FaceForensics-Faceshifter. 
+	 Many thanks to the kindly help from Rössler, Andreas and Nießner, Matthias,  you can download the dataset with above <a href="https://github.com/ondyari/FaceForensics" > link </a>
+	 . With the dataset you can 1）compare your own face replacement method with FaceShifter qualitatively and quantitively, 2) develop and test state-of-the-art face forgery detection algorithm on the generated videos. 
     </span>
 
   </div> 
   
   <br>
   <hr>
-   -->
+
    
   <center>
     <h2>Video</h2>
