@@ -1,0 +1,7 @@
+@inproceedings{li2020advancing,
+  title={Advancing high fidelity identity swapping for forgery detection},
+  author={Li, Lingzhi and Bao, Jianmin and Yang, Hao and Chen, Dong and Wen, Fang},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={5074--5083},
+  year={2020}
+}
